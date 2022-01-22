@@ -1,88 +1,72 @@
-import re
 import time
-import urllib.request
 import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.firefox.options import Options
 
-# def every_downloads_chrome(driver):
-#     if not driver.current_url.startswith("chrome://downloads"):
-#         driver.get("chrome://downloads/")
-#     return driver.execute_script("""
-#         var items = document.querySelector('downloads-manager')
-#             .shadowRoot.getElementById('downloadsList').items;
-#         if (items.every(e => e.state === "COMPLETE"))
-#             return items.map(e => e.fileUrl || e.file_url);
-#         """)
+def every_downloads_chrome(driver):
+    if not driver.current_url.startswith("chrome://downloads"):
+        driver.get("chrome://downloads/")
+    return driver.execute_script("""
+        var items = document.querySelector('downloads-manager')
+            .shadowRoot.getElementById('downloadsList').items;
+        if (items.every(e => e.state === "COMPLETE"))
+            return items.map(e => e.fileUrl || e.file_url);
+        """)
 
-# def enable_download_headless(browser, download_dir):
-#     browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
-#     params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dir}}
-#     browser.execute("send_command", params)
+def enable_download_headless(browser, download_dir):
+    browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+    params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dir}}
+    browser.execute("send_command", params)
 
 cwd = os.getcwd()
 
 # Chrome
-# chrome_options = Options()
+chrome_options = Options()
 # chrome_options.add_argument("--headless")
-# chrome_options.add_argument("--window-size=1920x1080")
-# chrome_options.add_argument("--disable-notifications")
-# chrome_options.add_argument('--no-sandbox')
-# chrome_options.add_argument('--verbose')
-# chrome_options.add_experimental_option("prefs", {
-#     "profile.default_content_setting_values.notifications": 2,
-#     "download.default_directory": cwd,
-#     "download.prompt_for_download": False,
-#     "download.directory_upgrade": True,
-#     "safebrowsing_for_trusted_sources_enabled": False,
-#     "safebrowsing.enabled": False
-# })
-# chrome_options.add_argument('--disable-gpu')
-# chrome_options.add_argument('--disable-software-rasterizer')
-# driver = webdriver.Chrome(executable_path=f'{cwd}/chrome/chromedriver', chrome_options=chrome_options)
-# download_dir = cwd
-# enable_download_headless(driver, download_dir)
-
-
-
-# chrome_options = Options()
-# chrome_options.add_argument("--headless")
-# chrome_options.add_argument("--window-size=1920x1080")
-# chrome_options.add_argument("--disable-notifications")
-# chrome_options.add_argument('--no-sandbox')
-# chrome_options.add_argument('--verbose')
-# chrome_options.add_experimental_option("prefs", {
-#     "profile.default_content_setting_values.notifications": 2,
-#     "download.default_directory": cwd,
-#     "download.prompt_for_download": False,
-#     "download.directory_upgrade": True,
-#     "safebrowsing_for_trusted_sources_enabled": False,
-#     "safebrowsing.enabled": False
-# })
-# chrome_options.add_argument('--disable-gpu')
-# chrome_options.add_argument('--disable-software-rasterizer')
+chrome_options.add_argument("--window-size=1920x1080")
+chrome_options.add_argument("--disable-notifications")
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--verbose')
+chrome_options.add_experimental_option("prefs", {
+    "profile.default_content_setting_values.notifications": 2,
+    "download.default_directory": cwd,
+    "download.prompt_for_download": False,
+    "download.directory_upgrade": True,
+    "safebrowsing_for_trusted_sources_enabled": False,
+    "safebrowsing.enabled": False
+})
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--disable-software-rasterizer')
+driver = webdriver.Chrome(executable_path=f'{cwd}/chrome/chromedriver', chrome_options=chrome_options)
+download_dir = cwd
+enable_download_headless(driver, download_dir)
 
 
 # Firefox
-profile = webdriver.FirefoxProfile()
-profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "")
-profile.set_preference("browser.helperApps.neverAsk.openFile", "")
-profile.set_preference("browser.helperApps.alwaysAsk.force", False)
-profile.set_preference("browser.download.manager.alertOnEXEOpen", False)
-profile.set_preference("browser.download.manager.focusWhenStarting", False)
-profile.set_preference("browser.download.manager.showWhenStarting", False)
-profile.set_preference("browser.download.manager.useWindow", False)
-profile.set_preference("browser.download.lastDir", cwd)
-profile.set_preference("browser.download.defaultFolder", cwd)
-profile.set_preference("browser.download.dir", cwd)
-profile.set_preference("browser.download.folderList", 2)
-profile.set_preference("browser.download.downloadDir", cwd)
-profile.set_preference("browser.download.useDownloadDir", True)
+# profile = webdriver.FirefoxProfile()
+# profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "mp4")
+# profile.set_preference("browser.helperApps.neverAsk.openFile", "mp4")
+# profile.set_preference("browser.helperApps.alwaysAsk.force", False)
+# profile.set_preference("browser.download.manager.alertOnEXEOpen", False)
+# profile.set_preference("browser.download.manager.focusWhenStarting", False)
+# profile.set_preference("browser.download.manager.showWhenStarting", False)
+# profile.set_preference("browser.download.manager.useWindow", False)
+# profile.set_preference("browser.download.lastDir", cwd)
+# profile.set_preference("browser.download.defaultFolder", cwd)
+# profile.set_preference("browser.download.dir", cwd)
+# profile.set_preference("browser.download.folderList", 2)
+# profile.set_preference("browser.download.downloadDir", cwd)
+# profile.set_preference("browser.download.useDownloadDir", True)
 
-driver = webdriver.Firefox(executable_path=f'{cwd}/gecko/geckodriver', firefox_profile=profile)
+# driver = webdriver.Firefox()
+
+# opts = Options()
+# opts.add_argument("--headless")
+# browser = webdriver.Firefox(executable_path=f'{cwd}/gecko/geckodriver',options=opts, firefox_profile=profile)
 
 daily_motion_link = 'https://www.dailymotion.com'
 base_video_href="https://www.dailymotion.com/search/kids/videos?duration=mins_1_5"
