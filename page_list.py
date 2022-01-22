@@ -8,15 +8,15 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-def every_downloads_chrome(driver):
-    if not driver.current_url.startswith("chrome://downloads"):
-        driver.get("chrome://downloads/")
-    return driver.execute_script("""
-        var items = document.querySelector('downloads-manager')
-            .shadowRoot.getElementById('downloadsList').items;
-        if (items.every(e => e.state === "COMPLETE"))
-            return items.map(e => e.fileUrl || e.file_url);
-        """)
+# def every_downloads_chrome(driver):
+#     if not driver.current_url.startswith("chrome://downloads"):
+#         driver.get("chrome://downloads/")
+#     return driver.execute_script("""
+#         var items = document.querySelector('downloads-manager')
+#             .shadowRoot.getElementById('downloadsList').items;
+#         if (items.every(e => e.state === "COMPLETE"))
+#             return items.map(e => e.fileUrl || e.file_url);
+#         """)
 
 # def enable_download_headless(browser, download_dir):
 #     browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
@@ -46,35 +46,49 @@ cwd = os.getcwd()
 # download_dir = cwd
 # enable_download_headless(driver, download_dir)
 
+
+
+# chrome_options = Options()
+# chrome_options.add_argument("--headless")
+# chrome_options.add_argument("--window-size=1920x1080")
+# chrome_options.add_argument("--disable-notifications")
+# chrome_options.add_argument('--no-sandbox')
+# chrome_options.add_argument('--verbose')
+# chrome_options.add_experimental_option("prefs", {
+#     "profile.default_content_setting_values.notifications": 2,
+#     "download.default_directory": cwd,
+#     "download.prompt_for_download": False,
+#     "download.directory_upgrade": True,
+#     "safebrowsing_for_trusted_sources_enabled": False,
+#     "safebrowsing.enabled": False
+# })
+# chrome_options.add_argument('--disable-gpu')
+# chrome_options.add_argument('--disable-software-rasterizer')
+
+
 # Firefox
 profile = webdriver.FirefoxProfile()
-options = Options()
+profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "")
+profile.set_preference("browser.helperApps.neverAsk.openFile", "")
+profile.set_preference("browser.helperApps.alwaysAsk.force", False)
+profile.set_preference("browser.download.manager.alertOnEXEOpen", False)
+profile.set_preference("browser.download.manager.focusWhenStarting", False)
+profile.set_preference("browser.download.manager.showWhenStarting", False)
+profile.set_preference("browser.download.manager.useWindow", False)
+profile.set_preference("browser.download.lastDir", cwd)
+profile.set_preference("browser.download.defaultFolder", cwd)
+profile.set_preference("browser.download.dir", cwd)
+profile.set_preference("browser.download.folderList", 2)
+profile.set_preference("browser.download.downloadDir", cwd)
+profile.set_preference("browser.download.useDownloadDir", True)
 
-chrome_options = Options()
-# chrome_options.add_argument("--headless")
-chrome_options.add_argument("--window-size=1920x1080")
-chrome_options.add_argument("--disable-notifications")
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--verbose')
-chrome_options.add_experimental_option("prefs", {
-    "profile.default_content_setting_values.notifications": 2,
-    "download.default_directory": cwd,
-    "download.prompt_for_download": False,
-    "download.directory_upgrade": True,
-    "safebrowsing_for_trusted_sources_enabled": False,
-    "safebrowsing.enabled": False
-})
-chrome_options.add_argument('--disable-gpu')
-chrome_options.add_argument('--disable-software-rasterizer')
-
-driver = webdriver.Firefox(executable_path=f'{cwd}/gecko/geckodriver', firefox_profile=profile, firefox_options=options)
-
+driver = webdriver.Firefox(executable_path=f'{cwd}/gecko/geckodriver', firefox_profile=profile)
 
 daily_motion_link = 'https://www.dailymotion.com'
 base_video_href="https://www.dailymotion.com/search/kids/videos?duration=mins_1_5"
 pages = []
 not_pages = []
-driver.get(base_video_href)
+# driver.get(base_video_href)
 
 # Get Download text file
 # try:
@@ -114,7 +128,7 @@ driver.get(base_video_href)
 
 
 # To Start DOWNLOADS
-with open("daily_motion_interview_Russian.txt", "r") as f:
+with open("dailymotion_kids.txt", "r") as f:
     line_numbers = list(range(7, 50))
     # To store lines
     lines = []
@@ -157,52 +171,3 @@ for link in undownloaded_links:
         paths = WebDriverWait(driver, 45, 1).until(every_downloads_chrome)
     except Exception as e:
         print(e)
-
-# for link in all_links:
-#     try:
-#         driver.get('https://en.savefrom.net/70/')
-#         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, 'sf_url')))
-#         link_paster = driver.find_element(By.NAME, 'sf_url')
-#         link_paster.send_keys(link)
-#         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, 'sf_submit')))
-#         driver.find_element(By.NAME, 'sf_submit').click()
-#         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[1]/div[2]/div[4]/div/div[1]/div[2]/div[2]/div[1]/a')))
-#         # download_link = driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div[2]/div[4]/div/div[1]/div[2]/div[2]/div[1]/a').get_attribute('href')
-#         # download_address.append(download_link)
-#         driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div[2]/div[4]/div/div[1]/div[2]/div[2]/div[1]/a').click()
-#         paths = WebDriverWait(driver, 120, 1).until(every_downloads_chrome)
-#     except Exception as e:
-#         print(link)
-#         undownloaded_links.append(link)
-#         print(e)
-
-# daily_motion_links = open('daily_motion_interview_save_link.txt', "w")
-# for element in daily_motion_links:
-#     daily_motion_links.write(element)
-#     daily_motion_links.write('\n')
-
-# import re
-# import time
-# import urllib.request
-# from selenium import webdriver
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.chrome.options import Options
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-
-
-# def every_downloads_chrome(driver):
-#     if not driver.current_url.startswith("chrome://downloads"):
-#         driver.get("chrome://downloads/")
-#     return driver.execute_script("""
-#         var items = document.querySelector('downloads-manager')
-#             .shadowRoot.getElementById('downloadsList').items;
-#         if (items.every(e => e.state === "COMPLETE"))
-#             return items.map(e => e.fileUrl || e.file_url);
-#         """)
-
-
-# def enable_download_headless(browser, download_dir):
-#     browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
-#     params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dir}}
-#     browser.execute("send_command", params)
