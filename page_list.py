@@ -33,7 +33,7 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--verbose')
 chrome_options.add_experimental_option("prefs", {
     "profile.default_content_setting_values.notifications": 2,
-    "download.default_directory": f"{cwd}/greetings/",
+    "download.default_directory": f"{cwd}/zoom_call",
     "download.prompt_for_download": False,
     "download.directory_upgrade": True,
     "safebrowsing_for_trusted_sources_enabled": False,
@@ -42,7 +42,7 @@ chrome_options.add_experimental_option("prefs", {
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-software-rasterizer')
 driver = webdriver.Chrome(executable_path=f'{cwd}/chrome/chromedriver', chrome_options=chrome_options)
-download_dir = f"{cwd}/greetings/"
+download_dir = f"{cwd}/zoom_call"
 enable_download_headless(driver, download_dir)
 
 
@@ -120,16 +120,17 @@ for link in lines:
         print(e)
 
 
-for link in undownloaded_links:
-    try:
-        driver.get('https://1qvid.com/')
-        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/section/form/div/button')))
-        link_paster = driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/input')
-        link_paster.send_keys(link)
-        driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/button').click()
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]')))
-        driver.find_element(By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]').click()
-        time.sleep(5)
-        paths = WebDriverWait(driver, 45, 1).until(every_downloads_chrome)
-    except Exception as e:
-        print(e)
+# for link in undownloaded_links:
+#     print(f"Undownloaded Video Index: {undownloaded_links.index(link) + 1}")
+#     try:
+#         driver.get('https://1qvid.com/')
+#         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/section/form/div/button')))
+#         link_paster = driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/input')
+#         link_paster.send_keys(link)
+#         driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/button').click()
+#         WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]')))
+#         driver.find_element(By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]').click()
+#         time.sleep(5)
+#         paths = WebDriverWait(driver, 45, 1).until(every_downloads_chrome)
+#     except Exception as e:
+#         print(e)
