@@ -103,6 +103,7 @@ download_address = []
 undownloaded_links = []
 
 for link in lines:
+    print(f"Video Index: {lines.index(link) + 1}")
     try:
         driver.get('https://1qvid.com/')
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/section/form/div/button')))
