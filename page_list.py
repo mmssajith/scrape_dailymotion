@@ -33,7 +33,7 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--verbose')
 chrome_options.add_experimental_option("prefs", {
     "profile.default_content_setting_values.notifications": 2,
-    "download.default_directory": f"{cwd}/children/",
+    "download.default_directory": f"{cwd}/greetings/",
     "download.prompt_for_download": False,
     "download.directory_upgrade": True,
     "safebrowsing_for_trusted_sources_enabled": False,
@@ -42,7 +42,7 @@ chrome_options.add_experimental_option("prefs", {
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-software-rasterizer')
 driver = webdriver.Chrome(executable_path=f'{cwd}/chrome/chromedriver', chrome_options=chrome_options)
-download_dir = f"{cwd}/children/"
+download_dir = f"{cwd}/greetings/"
 enable_download_headless(driver, download_dir)
 
 
