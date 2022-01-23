@@ -26,7 +26,7 @@ cwd = os.getcwd()
 
 # Chrome
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+# chrome_options.add_argument("--headless")
 chrome_options.add_argument("--window-size=1920x1080")
 chrome_options.add_argument("--disable-notifications")
 chrome_options.add_argument('--no-sandbox')
@@ -69,7 +69,7 @@ enable_download_headless(driver, download_dir)
 # browser = webdriver.Firefox(executable_path=f'{cwd}/gecko/geckodriver',options=opts, firefox_profile=profile)
 
 daily_motion_link = 'https://www.dailymotion.com'
-base_video_href="https://www.dailymotion.com/search/kids/videos?duration=mins_1_5"
+# base_video_href="https://www.dailymotion.com/search/greetings/videos"
 pages = []
 not_pages = []
 # driver.get(base_video_href)
@@ -104,7 +104,7 @@ not_pages = []
 
 
 # print(len(pages))
-# daily_motion_links = open('dailymotion_kids.txt', "w")
+# daily_motion_links = open('dailymotion_greetings.txt', "w")
 # for element in pages:
 #     daily_motion_links.write(element)
 #     daily_motion_links.write('\n')
@@ -112,9 +112,8 @@ not_pages = []
 
 
 # To Start DOWNLOADS
-with open("dailymotion_kids.txt", "r") as f:
+with open("download_files.txt", "r") as f:
     line_numbers = list(range(7, 50))
-    # To store lines
     lines = []
     for i, line in enumerate(f):
         if i in line_numbers:
