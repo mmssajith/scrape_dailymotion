@@ -101,23 +101,8 @@ with open("download_files.txt", "r") as f:
 
 download_address = []
 
-for link in lines[0:43]:
+for link in lines[0:65]:
     print(f"Video Index first: {lines.index(link) + 1}")
-    try:
-        driver.get('https://1qvid.com/')
-        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/section/form/div/button')))
-        link_paster = driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/input')
-        link_paster.send_keys(link)
-        driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/button').click()
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]')))
-        driver.find_element(By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]').click()
-        time.sleep(10)
-        paths = WebDriverWait(driver, 40, 1).until(every_downloads_chrome)
-    except:
-        pass
-
-for link in lines[43:86]:
-    print(f"Video Index second: {lines.index(link) + 1}")
     try:
         driver.get('https://1qvid.com/')
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/section/form/div/button')))
