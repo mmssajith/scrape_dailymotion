@@ -91,7 +91,7 @@ not_pages = []
 
 # To Start DOWNLOADS
 with open("download_files.txt", "r") as f:
-    line_numbers = list(range(7, 50))
+    line_numbers = list(range(0, 200))
     lines = []
     for i, line in enumerate(f):
         if i in line_numbers:
