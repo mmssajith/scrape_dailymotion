@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+search_key_word = "student"
 def every_downloads_chrome(driver):
     if not driver.current_url.startswith("chrome://downloads"):
         driver.get("chrome://downloads/")
@@ -33,7 +34,7 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--verbose')
 chrome_options.add_experimental_option("prefs", {
     "profile.default_content_setting_values.notifications": 2,
-    "download.default_directory": f"{cwd}/teaching",
+    "download.default_directory": f"{cwd}/{search_key_word}",
     "download.prompt_for_download": False,
     "download.directory_upgrade": True,
     "safebrowsing_for_trusted_sources_enabled": False,
@@ -42,12 +43,12 @@ chrome_options.add_experimental_option("prefs", {
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-software-rasterizer')
 driver = webdriver.Chrome(executable_path=f'{cwd}/chrome/chromedriver', chrome_options=chrome_options)
-download_dir = f"{cwd}/teaching"
+download_dir = f"{cwd}/{search_key_word}"
 enable_download_headless(driver, download_dir)
 
 
 daily_motion_link = 'https://www.dailymotion.com'
-# base_video_href="https://www.dailymotion.com/search/greetings/videos"
+# base_video_href = f"https://www.dailymotion.com/search/{search_key_word}/videos"
 pages = []
 not_pages = []
 # driver.get(base_video_href)
@@ -101,8 +102,9 @@ with open("download_files.txt", "r") as f:
 
 download_address = []
 
-for link in lines:
-    print(f"Video Index first: {lines.index(link) + 1}")
+downloaded_videos = []
+for link in lines[1:5]:
+    print(f"Video Index: {lines.index(link) + 1}")
     try:
         driver.get('https://1qvid.com/')
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/section/form/div/button')))
@@ -113,8 +115,14 @@ for link in lines:
         driver.find_element(By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]').click()
         time.sleep(10)
         paths = WebDriverWait(driver, 40, 1).until(every_downloads_chrome)
+        downloaded_videos.append(link)
     except:
         pass
+
+daily_motion_links = open(f'downloaded_{search_key_word}.txt', "w")
+for element in pages:
+    daily_motion_links.write(element)
+    daily_motion_links.write('\n')
 
 
 # for link in undownloaded_links:
