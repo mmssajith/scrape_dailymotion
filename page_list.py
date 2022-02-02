@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-search_key_word = "student"
+search_key_word = "children"
 def every_downloads_chrome(driver):
     if not driver.current_url.startswith("chrome://downloads"):
         driver.get("chrome://downloads/")
@@ -91,7 +91,7 @@ not_pages = []
 
 
 # To Start DOWNLOADS
-with open("download_files.txt", "r") as f:
+with open(f"dailymotion_{search_key_word}.txt", "r") as f:
     line_numbers = list(range(0, 500))
     lines = []
     for i, line in enumerate(f):
@@ -99,8 +99,6 @@ with open("download_files.txt", "r") as f:
             lines.append(line.strip())
         elif i > 50:
             break
-
-download_address = []
 
 downloaded_videos = []
 for link in lines:
@@ -113,29 +111,13 @@ for link in lines:
         driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/button').click()
         WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]')))
         driver.find_element(By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]').click()
-        time.sleep(10)
-        paths = WebDriverWait(driver, 40, 1).until(every_downloads_chrome)
         downloaded_videos.append(link)
+        time.sleep(10)
+        paths = WebDriverWait(driver, 40, 1).until(every_downloads_chrome)      
     except:
         pass
 
 daily_motion_links = open(f'downloaded_{search_key_word}.txt', "w")
-for element in pages:
+for element in downloaded_videos:
     daily_motion_links.write(element)
     daily_motion_links.write('\n')
-
-
-# for link in undownloaded_links:
-#     print(f"Undownloaded Video Index: {undownloaded_links.index(link) + 1}")
-#     try:
-#         driver.get('https://1qvid.com/')
-#         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/section/form/div/button')))
-#         link_paster = driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/input')
-#         link_paster.send_keys(link)
-#         driver.find_element(By.XPATH, '/html/body/div[1]/div/section/form/div/button').click()
-#         WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]')))
-#         driver.find_element(By.XPATH, '/html/body/div[1]/div/section/div[1]/div[2]/div/a[1]').click()
-#         time.sleep(5)
-#         paths = WebDriverWait(driver, 45, 1).until(every_downloads_chrome)
-#     except Exception as e:
-#         print(e)

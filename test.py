@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
+search_key_word = "children"
 def every_downloads_chrome(driver):
     if not driver.current_url.startswith("chrome://downloads"):
         driver.get("chrome://downloads/")
@@ -26,7 +26,7 @@ cwd = os.getcwd()
 
 # Chrome
 chrome_options = Options()
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument("--window-size=1920x1080")
 chrome_options.add_argument("--disable-notifications")
 chrome_options.add_argument('--no-sandbox')
@@ -45,7 +45,6 @@ driver = webdriver.Chrome(executable_path=f'{cwd}/chrome/chromedriver', chrome_o
 download_dir = f"{cwd}"
 enable_download_headless(driver, download_dir)
 
-search_key_word = "student"
 daily_motion_link = 'https://www.dailymotion.com'
 base_video_href=f"https://www.dailymotion.com/search/{search_key_word}/videos?duration=mins_1_5"
 pages = []
@@ -61,7 +60,7 @@ except:
 
 try:
     time.sleep(4)
-    for i in range(1, 1000):
+    for i in range(1, 500):
         try:
             driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
             WebDriverWait(driver, 15).until(
@@ -81,7 +80,7 @@ except Exception as e:
 
 
 print(len(pages))
-daily_motion_links = open('dailymotion_student.txt', "w")
+daily_motion_links = open(f'dailymotion_{search_key_word}.txt', "w")
 for element in pages:
     daily_motion_links.write(element)
     daily_motion_links.write('\n')
