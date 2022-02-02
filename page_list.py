@@ -103,7 +103,7 @@ with open("download_files.txt", "r") as f:
 download_address = []
 
 downloaded_videos = []
-for link in lines[1:5]:
+for link in lines:
     print(f"Video Index: {lines.index(link) + 1}")
     try:
         driver.get('https://1qvid.com/')
